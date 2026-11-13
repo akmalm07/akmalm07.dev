@@ -1,10 +1,10 @@
 # Akmal's portfolio
 
-A Node.js portfolio with project updates, a journal, a Google Calendar embed, and a content editor. Requires Node.js 20 or newer.
+A React and Node.js portfolio with project updates, a journal, a Google Calendar embed, and a content editor. Requires Node.js 20.19+ (20.x) or 22.12+.
 
 ## Run locally
 
-Run `npm ci` and `npm start`, then visit http://localhost:5050. The admin is at http://localhost:5050/admin. The first startup creates `.admin-password` unless `ADMIN_PASSWORD` is configured. Copy `.env.example` to `.env` to configure optional contact email; all three Gmail variables are required to enable the form.
+Run `npm ci`, `npm run build`, and `npm start`, then visit http://localhost:5050. The admin is at http://localhost:5050/admin. The first startup creates `.admin-password` unless `ADMIN_PASSWORD` is configured. Copy `.env.example` to `.env` to configure optional contact email; all three Gmail variables are required to enable the form.
 
 ## Content and images
 
@@ -18,7 +18,7 @@ The GitHub section shows up to six recently pushed public repositories from `akm
 
 ## Deploy to an Ubuntu or Debian VPS
 
-This reference deployment uses systemd, Nginx, and HTTPS. It has not been deployed to a server by this repository. You need a domain pointed at the VPS, a firewall permitting ports 80 and 443, Node.js 20+ installed at `/usr/bin/node`, Git access to the repository, Nginx, Certbot's Nginx plugin, and `apache2-utils` for `htpasswd`.
+This reference deployment uses systemd, Nginx, and HTTPS. It has not been deployed to a server by this repository. You need a domain pointed at the VPS, a firewall permitting ports 80 and 443, a supported Node.js version installed at `/usr/bin/node`, Git access to the repository, Nginx, Certbot's Nginx plugin, and `apache2-utils` for `htpasswd`.
 
 1. Clone the repository to `/var/www/akmalm07.dev` and install dependencies:
 
@@ -26,7 +26,9 @@ This reference deployment uses systemd, Nginx, and HTTPS. It has not been deploy
    sudo mkdir -p /var/www
    sudo git clone <YOUR_REPOSITORY_CLONE_URL> /var/www/akmalm07.dev
    cd /var/www/akmalm07.dev
-   sudo npm ci --omit=dev
+   sudo npm ci
+   sudo npm run build
+   sudo npm prune --omit=dev
    ```
 
    For a private repository, configure GitHub SSH access for the account doing the clone, or use an authenticated deployment method. Do not put access tokens into clone URLs or committed files.
@@ -66,4 +68,4 @@ This reference deployment uses systemd, Nginx, and HTTPS. It has not been deploy
 
 6. Open the HTTPS site, verify the calendar and images, and sign in to `/admin` through both password prompts. The contact form requires the optional email configuration. Google Calendar must be public or shared with each viewer; the GitHub section depends on GitHub's public API.
 
-For updates, back up `/var/lib/akmalm07.dev` and `.env`, pull the new code, run `npm ci --omit=dev`, and restart with `sudo systemctl restart akmalm07`. The separate data directory survives code updates. Check logs with `sudo journalctl -u akmalm07 -e`.
+For updates, back up `/var/lib/akmalm07.dev` and `.env`, pull the new code, run `npm ci`, `npm run build`, and `npm prune --omit=dev`, then restart with `sudo systemctl restart akmalm07`. The separate data directory survives code updates. Check logs with `sudo journalctl -u akmalm07 -e`.
