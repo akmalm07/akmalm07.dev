@@ -1,0 +1,23 @@
+[Unit]
+Description=Akmal portfolio website
+After=network.target
+
+[Service]
+Type=simple
+User=akmal-site
+Group=akmal-site
+WorkingDirectory=/var/www/akmalm07.dev
+EnvironmentFile=/var/www/akmalm07.dev/.env
+Environment=NODE_ENV=production
+Environment=DATA_DIR=/var/lib/akmalm07.dev
+ExecStart=/usr/bin/node /var/www/akmalm07.dev/server.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/akmalm07.dev
+
+[Install]
+WantedBy=multi-user.target
